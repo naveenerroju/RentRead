@@ -20,7 +20,6 @@ public class UserService {
     @Autowired
     private SecurityConfig securityConfig;
 
-
     public UserResponse registerUser(UserRegisterRequest user, Role role){
         ModelMapper modelMapper = new ModelMapper();
 
@@ -31,6 +30,5 @@ public class UserService {
         entity.setPassword(encryptedPassword);
         User response = repository.save(entity);
         return modelMapper.map(response, UserResponse.class);
-
     }
 }
