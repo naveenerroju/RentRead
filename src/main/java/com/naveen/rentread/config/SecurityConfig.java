@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .hasAnyAuthority(Role.ADMIN.name()))
                 .authorizeHttpRequests(request -> request.requestMatchers("/books/**")
                         .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name()))
+                .authorizeHttpRequests(request -> request.requestMatchers("/rent/**")
+                        .hasAnyAuthority(Role.USER.name()))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
