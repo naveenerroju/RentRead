@@ -1,5 +1,6 @@
 package com.naveen.rentread.controller;
 
+import com.naveen.rentread.domain.Rental;
 import com.naveen.rentread.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,9 @@ public class RentalController {
     private RentalService service;
 
     @PutMapping("/borrow/{bookId}")
-    public ResponseEntity<Void> borrowBook(@PathVariable(value = "bookId") Long bookId){
+    public ResponseEntity<Rental> borrowBook(@PathVariable(value = "bookId") Long bookId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        service.rentBook(authentication.getName(), bookId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(service.rentBook(authentication.getName(), bookId));
     }
 
     @PutMapping("/return/{bookId}")
