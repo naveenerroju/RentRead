@@ -1,5 +1,7 @@
 package com.naveen.rentread.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -16,6 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
+@JsonIgnoreProperties("password")
 public class User {
 
     @Id
@@ -40,6 +43,7 @@ public class User {
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Rental> rentals;
 
 }
