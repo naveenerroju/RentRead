@@ -17,7 +17,6 @@ public class RentalController {
     @Autowired
     private BookService service;
 
-
     @GetMapping("/available")
     public ResponseEntity<List<Book>> getAvailableBooks(){
         return ResponseEntity.ok(service.getAvailableBooks());
