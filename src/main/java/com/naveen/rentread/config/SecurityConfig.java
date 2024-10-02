@@ -40,8 +40,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/unauth/**")
                         .permitAll())
+                .authorizeHttpRequests(request -> request.requestMatchers("/manage/**")
+                        .hasAnyAuthority(Role.ADMIN.name()))
                 .authorizeHttpRequests(request -> request.requestMatchers("/books/**")
-                        .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name()))
+                        .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name()))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
