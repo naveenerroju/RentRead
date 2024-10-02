@@ -69,8 +69,37 @@ public class RentalService {
         return rental;
     }
 
-    public void returnBook(String email, Long bookId){
+    @Transactional
+    public Rental returnBook(String email, Long rentalId) {
+        // Fetch the rental by rentalId
+        Optional<Rental> rentalOptional = rentalRepository.findById(rentalId);
+        if (rentalOptional.isEmpty()) {
+            throw new IllegalArgumentException("Rental not found");
+        }
+        Rental rental = rentalOptional.get();
 
+        // Check if the book has already been returned
+        if (rental.getReturnedAt() != null) {
+            throw new IllegalStateException("Book has already been returned");
+        }
+
+        // Fetch the user and remove the rental from the user's rental list
+        User user = rental.getUser();
+        user.getRentals().remove(rental);  // Remove the rental from the user's rental set
+
+        // Fetch the book and mark it as available
+        Book book = rental.getBook();
+        book.setAvailable(true);
+
+        // Update the rental with the returned date
+        rental.setReturnedAt(LocalDate.now());
+
+        // Save the user (to update their rental list), the book, and the updated rental
+        userRepository.save(user);
+        bookRepository.save(book);
+        rentalRepository.delete(rental);  // Optionally delete the rental, since it's no longer needed
+
+        return rental;  // Return the updated rental, even though it will be removed
     }
 
 }

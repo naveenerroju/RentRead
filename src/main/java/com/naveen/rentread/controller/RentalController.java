@@ -24,10 +24,10 @@ public class RentalController {
         return ResponseEntity.ok(service.rentBook(authentication.getName(), bookId));
     }
 
-    @PutMapping("/return/{bookId}")
-    public ResponseEntity<Void> returnBook(@PathVariable(value = "bookId") Long bookId){
+    @PutMapping("/return/{rentalId}")
+    public ResponseEntity<Void> returnBook(@PathVariable(value = "rentalId") Long rentalId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        service.returnBook(authentication.getName(), bookId);
+        service.returnBook(authentication.getName(), rentalId);
         return ResponseEntity.ok().build();
     }
 
