@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
-public class RentalController {
+public class BooksController {
 
     @Autowired
     private BookService service;
@@ -20,5 +20,10 @@ public class RentalController {
     @GetMapping("/available")
     public ResponseEntity<List<Book>> getAvailableBooks(){
         return ResponseEntity.ok(service.getAvailableBooks());
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Book>> getAllBooks(){
+        return ResponseEntity.ok(service.getAllBooks());
     }
 }
