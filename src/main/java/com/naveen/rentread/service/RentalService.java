@@ -3,6 +3,7 @@ package com.naveen.rentread.service;
 import com.naveen.rentread.domain.Book;
 import com.naveen.rentread.domain.Rental;
 import com.naveen.rentread.domain.User;
+import com.naveen.rentread.exception.ValidationException;
 import com.naveen.rentread.repos.BooksRepository;
 import com.naveen.rentread.repos.RentalRepository;
 import com.naveen.rentread.repos.UserRepository;
@@ -35,14 +36,14 @@ public class RentalService {
         // Fetch the user by userId
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new ValidationException("User not found");
         }
         User user = userOptional.get();
 
         // Fetch the book by bookId and check if available
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         if (bookOptional.isEmpty()) {
-            throw new IllegalArgumentException("Book not found");
+            throw new ValidationException("Book not found");
         }
         Book book = bookOptional.get();
 
@@ -77,7 +78,7 @@ public class RentalService {
         // Fetch the rental by rentalId
         Optional<Rental> rentalOptional = rentalRepository.findById(rentalId);
         if (rentalOptional.isEmpty()) {
-            throw new IllegalArgumentException("Rental not found");
+            throw new ValidationException("Rental not found");
         }
         Rental rental = rentalOptional.get();
 
