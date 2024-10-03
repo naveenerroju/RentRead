@@ -1,24 +1,34 @@
 package com.naveen.rentread.controller;
 
-import com.naveen.rentread.domain.Book;
-import com.naveen.rentread.service.BookService;
+import com.naveen.rentread.domain.Rental;
+import com.naveen.rentread.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/rent")
 public class RentalController {
 
     @Autowired
-    private BookService service;
+    private RentalService service;
 
-    @GetMapping("/available")
-    public ResponseEntity<List<Book>> getAvailableBooks(){
-        return ResponseEntity.ok(service.getAvailableBooks());
+    @PutMapping("/borrow/{bookId}")
+    public ResponseEntity<Rental> borrowBook(@PathVariable(value = "bookId") Long bookId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(service.rentBook(authentication.getName(), bookId));
     }
+
+    @PutMapping("/return/{rentalId}")
+    public ResponseEntity<Void> returnBook(@PathVariable(value = "rentalId") Long rentalId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        service.returnBook(authentication.getName(), rentalId);
+        return ResponseEntity.ok().build();
+    }
+
 }

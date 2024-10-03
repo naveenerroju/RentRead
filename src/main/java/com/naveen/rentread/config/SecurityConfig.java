@@ -42,8 +42,10 @@ public class SecurityConfig {
                         .permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers("/manage/**")
                         .hasAnyAuthority(Role.ADMIN.name()))
-                .authorizeHttpRequests(request -> request.requestMatchers("/books/**")
+                .authorizeHttpRequests(request -> request.requestMatchers("/book/**")
                         .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name()))
+                .authorizeHttpRequests(request -> request.requestMatchers("/rent/**")
+                        .hasAnyAuthority(Role.USER.name()))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

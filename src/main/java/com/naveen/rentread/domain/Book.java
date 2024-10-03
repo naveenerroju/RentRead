@@ -1,5 +1,6 @@
 package com.naveen.rentread.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -35,6 +36,7 @@ public class Book {
     private boolean available;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Rental> rentals;
 
 }
