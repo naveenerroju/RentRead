@@ -50,24 +50,27 @@ public class RentalService {
             throw new IllegalStateException("Book is not available for rental");
         }
 
-        // Create a new rental and associate with user and book
+        // Create a new rental object
         Rental rental = new Rental();
         rental.setUser(user);
         rental.setBook(book);
         rental.setRentedAt(LocalDate.now());
 
-        // Add rental to user's rental set (JPA will manage this)
+        // Add rental to user's rentals and mark the book as unavailable
         user.getRentals().add(rental);
-
-        // Mark the book as unavailable
         book.setAvailable(false);
 
-        // Save both user and book, cascading the rental save
+        // Save the rental (this will assign an ID to the rental object)
+        Rental savedRental = rentalRepository.save(rental);
+
+        // Save changes to user and book as well
         userRepository.save(user);
         bookRepository.save(book);
 
-        return rental;
+        // Return the saved rental with the generated ID
+        return savedRental;
     }
+
 
     @Transactional
     public Rental returnBook(String email, Long rentalId) {

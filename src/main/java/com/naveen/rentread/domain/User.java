@@ -46,4 +46,17 @@ public class User {
     @JsonBackReference
     private Set<Rental> rentals;
 
+    // Custom adder method to enforce maximum size
+    public void addRental(Rental rental) {
+        if (this.rentals.size() >= 2) {
+            throw new IllegalStateException("Cannot have more than 2 rentals");
+        }
+        this.rentals.add(rental);
+    }
+
+    // Custom method to remove a rental
+    public void removeRental(Rental rental) {
+        this.rentals.remove(rental);
+    }
+
 }
