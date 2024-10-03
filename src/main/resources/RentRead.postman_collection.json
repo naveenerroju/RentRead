@@ -1,0 +1,459 @@
+{
+	"info": {
+		"_postman_id": "c9c826bb-5479-4083-b550-7775b30204f4",
+		"name": "RentRead",
+		"description": "StartFragment\n\n# RentRead - Online Book Rental System\n\n## Project Overview\n\nThis project implements a RESTful API service using Spring Boot for an online book rental system. The application allows users to register, log in, and rent books. Administrators can manage book details such as adding, updating, and deleting books. The system uses **H2 in-memory database** and supports authentication and authorization using **Basic Authentication**.\n\n### API Endpoints\n\n| Method | Endpoint | Description | Access Level |\n| --- | --- | --- | --- |\n| POST | `/unauth/register/user` | Register a new user | Public |\n| POST | `/unauth/register/admin` | Register a new admin | Public |\n| POST | `/manage/book` | Add a book into the books repository | Admin |\n| GET | `/book/available` | Get all available books | User/Admin |\n| GET | `/books` | Get all books | Admin Only |\n| PUT | `/rent/borrow/{bookId}` | Rent a book | User Only |\n| POST | `/books/{bookId}/return` | Return a rented book | User Only |\n| DELETE | `/rent/return/1` | Delete a book | Admin Only |\n\n## Error Handling\n\nThe API handles common errors and returns appropriate HTTP status codes:\n\n- **404** - Resource not found (e.g., book or user not found)\n    \n- **400** - Bad request (e.g., invalid input)\n    \n- **401** - Unauthorized (e.g., accessing private endpoints without login)\n    \n- **403** - Forbidden (e.g., insufficient permissions)\n    \n\n### Authentication\n\n- The API uses **Basic Authentication**.\n    \n- After registering, you can log in by providing the username (email) and password in the request header using Postman or any API client.\n    \n- Once logged in, use the generated session to make authorized API calls without resending credentials for some time.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21585631"
+	},
+	"item": [
+		{
+			"name": "register user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"naveenkumar@gmail.com\",\n    \"password\": \"naveen@123\",\n    \"firstName\":\"Naveen\",\n    \"lastName\":\"Kumar\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/unauth/register/user",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"unauth",
+						"register",
+						"user"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "register admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"dawkins@gmail.com\",\n    \"password\": \"dawkins@123\",\n    \"firstName\":\"Richard\",\n    \"lastName\":\"Dawkins\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/unauth/register/admin",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"unauth",
+						"register",
+						"admin"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "add book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "dawkins@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dawkins@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"12 Rules for life\",\n    \"author\": \"Jordan Peterson\",\n    \"genre\":\"Self-Help\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/manage/book",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"manage",
+						"book"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Get available books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "naveen@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "naveenkumar@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/book/available",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"book",
+						"available"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Get books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "dawkins@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dawkins@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/book",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"book"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "borrow a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "naveenkumar@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "naveen@123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/rent/borrow/1",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"rent",
+						"borrow",
+						"1"
+					]
+				},
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "return borrowed book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "naveenkumar@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "naveen@123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/rent/return/1",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"rent",
+						"return",
+						"1"
+					]
+				},
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "dawkins@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dawkins@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/manage/book/1",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"manage",
+						"book",
+						"1"
+					]
+				},
+				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
