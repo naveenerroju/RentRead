@@ -1,43 +1,128 @@
-# Rentread
+# RentRead - Online Book Rental System
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
+## Project Overview
+This project implements a RESTful API service using Spring Boot for an online book rental system. The application allows users to register, log in, and rent books. Administrators can manage book details such as adding, updating, and deleting books. The system uses **H2 in-memory database** and supports authentication and authorization using **Basic Authentication**.
 
-## Development
+## Key Features
 
-Update your local database connection in `application.properties` or create your own `application-local.properties` file to override
-settings for development.
+1. **User Registration & Login**
+    - Users can register with email, password, first name, and last name.
+    - Passwords are encrypted using BCrypt.
+    - Users can log in using their email and password.
 
-During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be
-added in the VM options of the Run Configuration after enabling this property in "Modify options".
+2. **Book Management**
+    - Users can browse all available books.
+    - Administrators can create, update, and delete books.
+    - Fields include: Title, Author, Genre, and Availability Status.
 
-Lombok must be supported by your IDE. For IntelliJ install the Lombok plugin and enable annotation processing -
-[learn more](https://bootify.io/next-steps/spring-boot-with-lombok.html).
+3. **Rental Management**
+    - Users can rent books, but cannot have more than two active rentals.
+    - Users can return rented books.
 
-After starting the application it is accessible under `localhost:8080`.
+4. **Authentication & Authorization**
+    - **Basic Authentication** is used.
+    - Two roles: `USER` and `ADMIN`.
+    - Public endpoints are accessible to everyone (e.g., registration and login).
+    - Private endpoints are accessible only to authenticated users. Admin-specific actions are restricted to `ADMIN` role.
 
-## Build
+5. **Unit Testing**
+    - The project includes unit tests using **MockMvc** and **Mockito** for key functionalities.
 
-The application can be built using the following command:
+## Technologies Used
 
+- **Spring Boot** (REST API)
+- **Spring Security** (Authentication & Authorization)
+- **H2 Database** (In-memory database for testing)
+- **Maven** (Dependency Management)
+- **JUnit** & **Mockito** (Unit Testing)
+- **Postman** (API Testing - Collection included in `src/main/resources`)
+
+## Getting Started
+
+### Prerequisites
+
+- JDK 11 or later
+- Maven 3.6+
+- Postman (optional, for testing)
+
+### Running the Application
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/naveenerroju/rentread.git
+
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd rentread
+
+3. **Build the Application**
+    ```bash
+   mvn clean install
+
+4. **Run the Application**
+   ```bash
+   mvn spring-boot:run
+
+**Alternatively, you can build a JAR file and run it:**
+```bash
+   mvn clean package
+   java -jar target/rentread-0.0.1-SNAPSHOT.jar
 ```
-mvnw clean package
+### Access the H2 Database Console
+
+- URL: `http://localhost:8080/h2-console`
+- JDBC URL: `jdbc:h2:mem:testdb`
+- Username: `sa`
+- Password: (leave blank)
+
+### API Endpoints
+
+| Method | Endpoint                  | Description                          | Access Level |
+|--------|---------------------------|--------------------------------------|--------------|
+| POST   | `/unauth/register/user`   | Register a new user                  | Public       |
+| POST   | `/unauth/register/admin`  | Register a new admin                 | Public       |
+| POST   | `/manage/book`            | Add a book into the books repository | Admin        |
+| GET    | `/book/available`         | Get all available books              | User/Admin   |
+| GET    | `/books`                  | Get all books                        | Admin Only   |
+| PUT    | `/rent/borrow/{bookId}`   | Rent a book                          | User Only    |
+| POST   | `/books/{bookId}/return`  | Return a rented book                 | User Only    |
+| DELETE | `/rent/return/1`          | Delete a book                        | Admin Only   |
+
+## Error Handling
+
+The API handles common errors and returns appropriate HTTP status codes:
+- **404** - Resource not found (e.g., book or user not found)
+- **400** - Bad request (e.g., invalid input)
+- **401** - Unauthorized (e.g., accessing private endpoints without login)
+- **403** - Forbidden (e.g., insufficient permissions)
+
+### Authentication
+
+- The API uses **Basic Authentication**.
+- After registering, you can log in by providing the username (email) and password in the request header using Postman or any API client.
+- Once logged in, use the generated session to make authorized API calls without resending credentials for some time.
+
+### Configuration
+
+- The application uses **H2 in-memory database** for persistence. No additional setup is required.
+- **Spring Security** is used for securing the API with Basic Authentication.
+
+### Unit Testing
+
+Unit tests are included and cover key functionalities like user registration, book management, and rental transactions.
+
+To run the tests:
+```bash
+mvn test
 ```
 
-Start your application with the following command - here with the profile `production`:
-
-```
-java -Dspring.profiles.active=production -jar ./target/rentread-0.0.1-SNAPSHOT.jar
-```
-
-If required, a Docker image can be created with the Spring Boot plugin. Add `SPRING_PROFILES_ACTIVE=production` as
-environment variable when running the container.
-
-```
-mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=com.naveen/rentread
-```
-
-## Further readings
-
-* [Maven docs](https://maven.apache.org/guides/index.html)  
-* [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)  
-* [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/reference/jpa.html)
+### Summary of Contents:
+- **Project Overview**: Brief summary of the project and its key features.
+- **Technologies Used**: List of technologies (Spring Boot, H2, Maven, etc.).
+- **Getting Started**: Instructions to clone, build, and run the project.
+- **Postman Collection**: Instructions for using the Postman collection.
+- **API Endpoints**: List of key API endpoints with their descriptions and access levels.
+- **Authentication**: Information about Basic Authentication.
+- **Unit Testing**: Instructions for running unit tests.
+- **Error Handling**: HTTP codes returned for common errors.
+- **Logging**: Explanation about logging configuration.
