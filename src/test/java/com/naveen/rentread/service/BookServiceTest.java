@@ -9,9 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class BookServiceTest {
+class BookServiceTest {
 
     @Mock
     private BooksRepository booksRepository;
@@ -28,13 +27,11 @@ public class BookServiceTest {
     @InjectMocks
     private BookService bookService;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
     private BookCreationRequest bookCreationRequest;
     private Book book;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         bookCreationRequest = new BookCreationRequest();
         bookCreationRequest.setTitle("Test Book");
         bookCreationRequest.setAuthor("Test Author");
@@ -47,7 +44,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testCreateBook() {
+    void testCreateBook() {
         when(booksRepository.save(any(Book.class))).thenReturn(book);
 
         Book createdBook = bookService.createBook(bookCreationRequest);
@@ -60,7 +57,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testDeleteBook() {
+    void testDeleteBook() {
         when(booksRepository.findById(1L)).thenReturn(Optional.of(book));
 
         bookService.deleteBook(1L);
@@ -69,7 +66,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testDeleteBook_NotAvailable() {
+    void testDeleteBook_NotAvailable() {
         book.setAvailable(false);
         when(booksRepository.findById(1L)).thenReturn(Optional.of(book));
 
@@ -79,8 +76,8 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testGetAllBooks() {
-        when(booksRepository.findAll()).thenReturn(Arrays.asList(book));
+    void testGetAllBooks() {
+        when(booksRepository.findAll()).thenReturn(Collections.singletonList(book));
 
         List<Book> books = bookService.getAllBooks();
 
@@ -91,8 +88,8 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testGetAvailableBooks() {
-        when(booksRepository.findByAvailableTrue()).thenReturn(Arrays.asList(book));
+    void testGetAvailableBooks() {
+        when(booksRepository.findByAvailableTrue()).thenReturn(Collections.singletonList(book));
 
         List<Book> books = bookService.getAvailableBooks();
 
